@@ -2,6 +2,10 @@
 
 Allows you to open URLs inside Steam Client to save the hassle of logging in normal browser.
 
+## Attribution
+
+Icon made by [SimpleIcon](https://www.flaticon.com/authors/simpleicon) from www.flaticon.com
+
 ## Install
 
 	$ npm install
