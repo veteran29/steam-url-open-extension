@@ -2,6 +2,11 @@
 
 Allows you to open URLs inside Steam Client to save the hassle of logging in normal browser.
 
+## Download
+
+* [Chrome](https://chrome.google.com/webstore/search/steam%20url%20opener)
+* [Firefox](https://addons.mozilla.org/pl/firefox/addon/steam-url-opener)
+
 ## Attribution
 
 Icon made by [SimpleIcon](https://www.flaticon.com/authors/simpleicon) from www.flaticon.com  
