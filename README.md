@@ -11,6 +11,7 @@ Allows you to open URLs inside Steam Client to save the hassle of logging in nor
 
 Icon made by [SimpleIcon](https://www.flaticon.com/authors/simpleicon) from www.flaticon.com  
 These icons belong to their respective owners and are not under GNU License.
+White outline added by @HorribleGoat
 
 ## Install
 
