@@ -55,5 +55,18 @@ app.pageAction.onClicked.addListener(async tab => {
   const steamURL = `steam://openurl/${tab.url}`;
   console.log('navigating to:', steamURL);
 
-  app.tabs.update({ url: steamURL });
+  if ((await browser.runtime.getBrowserInfo()).name === 'Firefox') {
+    // open new tab, updating url with steam:// url does not work in firefox anymore
+    const newTab = await app.tabs.create({ url: steamURL });
+
+    setTimeout(() => {
+      console.log('closing tab', newTab);
+      // close the new temporary tab
+      app.tabs.remove(newTab.id);
+      // active the old tab back
+      app.tabs.update(tab.id, { active: true });
+    }, 100);
+  } else {
+    app.tabs.update({ url: steamURL });
+  }
 });
