@@ -51,11 +51,13 @@ app.tabs.onActivated.addListener(async () => {
   checkCurrentTab();
 });
 
+const FIREFOX_WORKAROUND = false;
+
 app.pageAction.onClicked.addListener(async tab => {
   const steamURL = `steam://openurl/${tab.url}`;
   console.log('navigating to:', steamURL);
 
-  if ((await browser.runtime.getBrowserInfo()).name === 'Firefox') {
+  if ((await browser.runtime.getBrowserInfo()).name === 'Firefox' && FIREFOX_WORKAROUND) {
     // open new tab, updating url with steam:// url does not work in firefox anymore
     const newTab = await app.tabs.create({ url: steamURL });
 
