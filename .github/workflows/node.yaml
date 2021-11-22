@@ -3,13 +3,14 @@ name: Node Build
 on: [push]
 
 jobs:
-  build_and_test:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
       - name: Build
         run: |
+          npm i -g npm
           npm install
           npm run build chrome
           npm run build firefox
