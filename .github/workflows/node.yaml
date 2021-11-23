@@ -21,8 +21,13 @@ jobs:
           npm install
           npm run build chrome
           npm run build firefox
-      - name: Upload artifacts
+      - name: Upload packages
         uses: actions/upload-artifact@v2
         with:
           name: packages
           path: packages
+      - name: Upload dist
+        uses: actions/upload-artifact@v2
+        with:
+          name: dist
+          path: dist
