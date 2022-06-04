@@ -15,6 +15,8 @@ const getCurrentTab = async () => (await app.tabs.query({ active: true, currentW
  */
 const checkCurrentTab = async () => {
   const currentTab = await getCurrentTab()
+  if (!currentTab)
+    return;
 
   const currentTabHostame = new URL(currentTab.url).hostname;
   if (supportedHostnames.includes(currentTabHostame)) {
