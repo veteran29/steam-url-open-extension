@@ -3,10 +3,11 @@
   "version": "0.1.0",
   "description": "Allows you to open URLs inside Steam Client to save the hasle of logging in normal browser.",
   "scripts": {
-    "dev": "npx webextension-toolbox dev",
+    "dev": "npx webextension-toolbox dev --autoReload=false",
     "build": "npx webextension-toolbox build"
   },
   "devDependencies": {
+    "@types/chrome": "^0.0.188",
     "webextension-toolbox": "github:webextension-toolbox/webextension-toolbox#c934bfe121f90a9ea4bb87058cb0d92883d0dd47"
   }
 }

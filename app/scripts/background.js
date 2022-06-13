@@ -1,76 +1,44 @@
-/** @typedef {import('webextension-polyfill-ts').Browser} Browser */
-/**
- * For VSCode IntelliSense
- * @type Browser 
- */
-const app = browser;
+import loadImagePathForServiceWorker from './loadImage';
 
 console.log('Steam URL Opener Init');
 
+chrome.runtime.onInstalled.addListener(async () => {
+  console.log('Steam URL Opener onInstalled');
 
-const getCurrentTab = async () => (await app.tabs.query({ active: true, currentWindow: true }))[0];
+  const openTabInSteam = async tab => {
+    const steamURL = `steam://openurl/${tab.url}`;
+    console.log('navigating to:', steamURL);
 
-/**
- * Checks currently activated tab and activates page button if it's valid.
- */
-const checkCurrentTab = async () => {
-  const currentTab = await getCurrentTab()
-  if (!currentTab)
-    return;
-
-  const currentTabHostame = new URL(currentTab.url).hostname;
-  if (supportedHostnames.includes(currentTabHostame)) {
-    app.pageAction.show(currentTab.id);
-    app.pageAction.setTitle({ tabId: currentTab.id, title: "Open in Steam"});
-  } else {
-    app.pageAction.hide(currentTab.id);
-    app.pageAction.setTitle({ tabId: currentTab.id, title: "Not on Steam page"});
+    chrome.tabs.update({ url: steamURL });
   };
-};
 
-// Check the tab on extension load
-checkCurrentTab();
+  const RULE_ACTION_ENABLE = {
+    conditions: [
+      new chrome.declarativeContent.PageStateMatcher({
+        pageUrl: { hostEquals: 'store.steampowered.com'}
+      }),
+      new chrome.declarativeContent.PageStateMatcher({
+        pageUrl: { hostEquals: 'steamcommunity.com'}
+      })
+    ],
+    actions: [
+      new chrome.declarativeContent.ShowAction(),
+      new chrome.declarativeContent.SetIcon({
+        imageData: {
+          '64': await loadImagePathForServiceWorker('images/icon-on-64.png'),
+          '128': await loadImagePathForServiceWorker('images/icon-on-128.png')
+        }
+      })
+    ]
+  };
 
-/**
- * Steam will open only it's own domains in built in browser.
- * List of supported domains.
- */
-const supportedHostnames = [
-  "store.steampowered.com",
-  "steamcommunity.com",
-];
+  chrome.action.disable(); // do not show action by default, only when rules are fullfilled
+  chrome.declarativeContent.onPageChanged.removeRules(undefined, () => {
+    console.log('Steam URL Opener removeRules');
 
-app.tabs.onUpdated.addListener(async (tabId, changeInfo) => {
-  if (!changeInfo.url) return;
+    chrome.declarativeContent.onPageChanged.addRules([RULE_ACTION_ENABLE]);
+  });
 
-  const currentTab = await getCurrentTab()
-  if (tabId !== currentTab.id) return;
+  chrome.action.onClicked.addListener(openTabInSteam);
 
-  checkCurrentTab();
-});
-
-app.tabs.onActivated.addListener(async () => {
-  checkCurrentTab();
-});
-
-const FIREFOX_WORKAROUND = false;
-
-app.pageAction.onClicked.addListener(async tab => {
-  const steamURL = `steam://openurl/${tab.url}`;
-  console.log('navigating to:', steamURL);
-
-  if ((await browser.runtime.getBrowserInfo()).name === 'Firefox' && FIREFOX_WORKAROUND) {
-    // open new tab, updating url with steam:// url does not work in firefox anymore
-    const newTab = await app.tabs.create({ url: steamURL });
-
-    setTimeout(() => {
-      console.log('closing tab', newTab);
-      // close the new temporary tab
-      app.tabs.remove(newTab.id);
-      // active the old tab back
-      app.tabs.update(tab.id, { active: true });
-    }, 100);
-  } else {
-    app.tabs.update({ url: steamURL });
-  }
 });
