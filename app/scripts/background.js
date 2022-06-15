@@ -2,8 +2,8 @@ import loadImagePathForServiceWorker from './loadImage';
 
 console.log('Steam URL Opener Init');
 
-chrome.runtime.onInstalled.addListener(async () => {
-  console.log('Steam URL Opener onInstalled');
+const install = async () => {
+  console.log('Steam URL Opener install');
 
   const openTabInSteam = async tab => {
     const steamURL = `steam://openurl/${tab.url}`;
@@ -41,4 +41,7 @@ chrome.runtime.onInstalled.addListener(async () => {
 
   chrome.action.onClicked.addListener(openTabInSteam);
 
-});
+};
+
+install();
+// chrome.runtime.onInstalled.addListener(install);
