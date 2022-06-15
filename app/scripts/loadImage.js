@@ -3,7 +3,7 @@
 // Taken from chrome extension::setIcon as there's a bug with paths not working right now
 export default async function loadImagePathForServiceWorker(path, callback, failureCallback) {
   path = chrome.runtime.getURL(path);
-  console.warn(path);
+  console.debug('loading image', path);
   const response = await fetch(path);
   if (!response.ok) {
     throw new Error('Response from fetching icon not ok.');
