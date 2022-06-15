@@ -1,6 +1,6 @@
 {
   "name": "steam-url-opener",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Allows you to open URLs inside Steam Client to save the hasle of logging in normal browser.",
   "scripts": {
     "dev": "npx webextension-toolbox dev --autoReload=false",
